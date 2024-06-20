@@ -1,5 +1,5 @@
 from . import CONN, CURSOR
-from colorama import Fore, Back, Style
+from colorama import Fore
 
 class Patient:
 
