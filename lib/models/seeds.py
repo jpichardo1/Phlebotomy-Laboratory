@@ -1,8 +1,8 @@
 # import random
 # from faker import Faker # type: ignore
-from models.patient import Patient
-from models.appointment import Appointment
-from models.phlebotomist import Phlebotomist
+from patient import Patient
+from appointment import Appointment
+from phlebotomist import Phlebotomist
 
 def seeds_database():
 
@@ -38,11 +38,11 @@ def seeds_database():
 
     # Create 5 appointments
     appointments = [
-        Appointment.create("2024-06-01 09:00:00", phlebotomists[0].id, patients[0].id),
-        Appointment.create("2024-06-08 10:30:00", phlebotomists[1].id, patients[1].id),
-        Appointment.create("2024-06-14 11:15:00", phlebotomists[2].id, patients[2].id),
-        Appointment.create("2024-06-19 12:45:00", phlebotomists[3].id, patients[3].id),
-        Appointment.create("2024-06-27 13:15:00", phlebotomists[4].id, patients[4].id),
+        Appointment.create("06-01-2024 09:00:00", phlebotomists[1].id, patients[1].id),
+        Appointment.create("06-08-2024 10:30:00", phlebotomists[2].id, patients[2].id),
+        Appointment.create("06-14-2024 11:15:00", phlebotomists[3].id, patients[3].id),
+        Appointment.create("06-19-2024 12:45:00", phlebotomists[4].id, patients[4].id),
+        Appointment.create("06-27-2024 13:15:00", phlebotomists[5].id, patients[5].id),
     ]
 
     print("Populating finished...")

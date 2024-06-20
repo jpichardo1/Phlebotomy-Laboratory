@@ -1,4 +1,5 @@
-from models.__init__ import CONN, CURSOR
+from . import CONN, CURSOR
+from colorama import Fore, Back, Style
 
 class Patient:
 
@@ -88,5 +89,45 @@ class Patient:
         CONN.commit()
         self.id = None
 
+    @classmethod
+    def find_by_id_with_appointments(cls, patient_id):
+        sql = """
+            SELECT 
+                patients.id, patients.name, patients.date_of_birth, patients.address, patients.phone, patients.is_sick,
+                appointments.id, appointments.date, phlebotomists.name
+            FROM 
+                patients
+            LEFT JOIN 
+                appointments 
+            ON 
+                patients.id = appointments.patient_id
+            LEFT JOIN 
+                phlebotomists
+            ON 
+                appointments.phlebotomist_id = phlebotomists.id
+            WHERE 
+                patients.id = ?;
+        """
+        CURSOR.execute(sql, (patient_id,))
+        rows = CURSOR.fetchall()
+
+        if rows:
+            patient_data = rows[0]
+            patient = cls(id=patient_data[0], name=patient_data[1], date_of_birth=patient_data[2], address=patient_data[3], phone=patient_data[4], is_sick=patient_data[5])
+            appointments = []
+            for row in rows:
+                if row[6]:  # Check if there is an appointment
+                    appointment = {
+                        'appointment_id': row[6],
+                        'date': row[7],
+                        'phlebotomist_name': row[8]
+                    }
+                    appointments.append(appointment)
+            return patient, appointments
+        return None, None   
+
+    def is_sick_status(self):
+        return f"{Fore.RED}Yes{Fore.RESET}" if self.is_sick else f"{Fore.GREEN}No{Fore.RESET}"    
+
     def __repr__(self):
-        return f"Patient(id={self.id}, name='{self.name}', date_of_birth='{self.date_of_birth}', address='{self.address}', phone={self.phone}, is_sick={self.is_sick})"
+        return f"{Fore.WHITE}Patient(ID - {self.id} | {self.name} | {self.date_of_birth} | {self.address} | {self.phone} | Is sick? - {self.is_sick_status()})"

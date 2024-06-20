@@ -1,4 +1,5 @@
-from models.__init__ import CONN, CURSOR
+from . import CONN, CURSOR
+from colorama import Fore
 
 class Appointment:
 
@@ -90,5 +91,25 @@ class Appointment:
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
+    @staticmethod
+    def get_phlebotomist_name(phlebotomist_id):
+        sql = """
+            SELECT name FROM phlebotomists WHERE id = ?;
+        """
+        CURSOR.execute(sql, (phlebotomist_id,))
+        row = CURSOR.fetchone()
+        return row[0] if row else "Unknown"
+
+    @staticmethod
+    def get_patient_name(patient_id):
+        sql = """
+            SELECT name FROM patients WHERE id = ?;
+        """
+        CURSOR.execute(sql, (patient_id,))
+        row = CURSOR.fetchone()
+        return row[0] if row else "Unknown"
+
     def __repr__(self):
-        return f"Appointment(id={self.id}, date='{self.date}', phlebotomist_id={self.phlebotomist_id}, patient_id={self.patient_id})"
+        phlebotomist_name = self.get_phlebotomist_name(self.phlebotomist_id)
+        patient_name = self.get_patient_name(self.patient_id)
+        return f"{Fore.WHITE}Appointment(ID - {self.id} | {self.date} | Phlebotomist - {phlebotomist_name} ({self.phlebotomist_id}) | Patient - {patient_name} ({self.patient_id}))"

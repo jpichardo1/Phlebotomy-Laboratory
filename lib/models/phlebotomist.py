@@ -1,4 +1,6 @@
-from models.__init__ import CONN, CURSOR
+from . import CONN, CURSOR
+from colorama import Fore
+
 
 class Phlebotomist:
 
@@ -88,4 +90,4 @@ class Phlebotomist:
         self.id = None
 
     def __repr__(self):
-        return f"Phlebotomist(id={self.id}, name='{self.name}', yrs_exp={self.yrs_exp})"
+        return f"{Fore.WHITE}Phlebotomist(ID - {self.id} | {self.name} | Years of experience - {self.yrs_exp})"
